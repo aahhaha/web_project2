@@ -1,145 +1,194 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
-    <meta charset="UTF-8" />
-    <title>DEXTER - Analysis</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <script defer src="theme.js"></script>
-    <style>
-        .section { max-width:600px; margin:50px auto; padding:25px; border-radius:12px; }
-        [data-bs-theme="light"] .section { background:#f9f9f9; color:#212529; }
-        [data-bs-theme="dark"]  .section { background:#1e1e1e; color:#f0f0f0; }
-
-        .btn-analyze { background:#a83232; color:white; border:none; }
-        .btn-analyze:hover { background:#912d2d; }
-
-        .section h3 { color:#a83232; }
-    </style>
+  <meta charset="UTF-8" />
+  <title>DEXTER - Analysis</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script defer src="theme.js"></script>
+  <style>
+    .section { max-width:600px; margin:50px auto; padding:25px; border-radius:12px; }
+    [data-bs-theme="light"] .section { background:#f9f9f9; color:#212529; }
+    [data-bs-theme="dark"]  .section { background:#1e1e1e; color:#f0f0f0; }
+    .btn-analyze { background:#a83232; color:white; border:none; }
+    .btn-analyze:hover { background:#912d2d; }
+    .section h3 { color:#a83232; }
+  </style>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
 <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">DEXTER</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div id="nav" class="collapse navbar-collapse">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="Killers.html">Killers</a></li>
-                <li class="nav-item"><a class="nav-link" href="Case_Files.html">Case Files</a></li>
-                <li class="nav-item"><a class="nav-link active" href="Analysis.html">Analysis</a></li>
-                <li class="nav-item"><a class="nav-link" href="Form.html">Access Terminal</a></li>
-            </ul>
-            <button id="themeToggle" class="btn btn-outline-secondary btn-sm ms-3">Toggle Theme</button>
-        </div>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="index.html">DEXTER</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div id="nav" class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="Killers.html">Killers</a></li>
+        <li class="nav-item"><a class="nav-link" href="Case_Files.html">Case Files</a></li>
+        <li class="nav-item"><a class="nav-link active" href="Analysis.html">Analysis</a></li>
+        <li class="nav-item"><a class="nav-link" href="Form.html">Access Terminal</a></li>
+      </ul>
+      <button id="themeToggle" class="btn btn-outline-secondary btn-sm ms-3">Toggle Theme</button>
     </div>
+  </div>
 </nav>
 
 <main class="flex-fill">
-    <div class="container text-center mt-5">
-        <h1 class="fw-bold text-danger">Behavioral Analysis Lab</h1>
-        <p class="text-muted">Interactive evaluation based on Dexter's code.</p>
+  <div class="container text-center mt-5">
+    <h1 class="fw-bold text-danger">Behavioral Analysis Lab</h1>
+    <p class="text-muted">Interactive evaluation based on Dexter's code.</p>
+  </div>
+
+  <section class="section">
+    <h3 class="text-center mb-3 fw-semibold text-danger">Threat Level Calculator</h3>
+    <input id="nameInput" type="text" class="form-control mb-2" placeholder="Enter suspect name">
+    <input id="victimsInput" type="number" class="form-control mb-3" placeholder="Number of victims">
+    <button id="analyzeBtn" class="btn btn-analyze w-100">Analyze</button>
+    <p id="resultText" class="result mt-3 fw-bold text-center"></p>
+  </section>
+
+  <section class="section">
+    <h3 class="text-center mb-3 fw-semibold text-danger">Blood Sample Sorter</h3>
+    <p class="text-center text-secondary">Enter comma-separated DNA densities and choose order.</p>
+    <input id="nums" type="text" class="form-control mb-3" placeholder="e.g. 12,5,8,1,20">
+    <div class="d-flex gap-2">
+      <button class="btn btn-outline-danger flex-fill" onclick="sortNums('asc')">Sort Asc</button>
+      <button class="btn btn-outline-danger flex-fill" onclick="sortNums('desc')">Sort Desc</button>
     </div>
+    <p id="sorted" class="mt-3 text-center"></p>
+  </section>
 
-    <section class="section">
-        <h3 class="text-center mb-3 fw-semibold text-danger">Threat Level Calculator</h3>
-        <input id="nameInput" type="text" class="form-control mb-2" placeholder="Enter suspect name">
-        <input id="victimsInput" type="number" class="form-control mb-3" placeholder="Number of victims">
-        <button id="analyzeBtn" class="btn btn-analyze w-100">Analyze</button>
-        <p id="resultText" class="result mt-3 fw-bold text-center"></p>
-    </section>
+  <section class="section text-center">
+    <h3 class="text-center mb-3 fw-semibold text-danger">Blood Box Animation</h3>
+    <div class="position-relative" style="height: 240px;">
+      <div id="animBox" style="width: 80px; height: 80px; border-radius: 12px; background: #a83232; opacity: 0.9; position:absolute;"></div>
+    </div>
+    <button id="animateBox" class="btn btn-outline-danger mt-3">Run Box Animation</button>
+  </section>
 
-    <section class="section">
-        <h3 class="text-center mb-3 fw-semibold text-danger">Blood Sample Sorter</h3>
-        <p class="text-center text-secondary">Enter comma-separated DNA densities and choose order.</p>
-        <input id="nums" type="text" class="form-control mb-3" placeholder="e.g. 12,5,8,1,20">
-        <div class="d-flex justify-content-center gap-2 mb-3">
-            <button id="asc" class="btn btn-danger">Ascending</button>
-            <button id="desc" class="btn btn-secondary">Descending</button>
-        </div>
-        <p id="sorted" class="text-center fw-bold"></p>
-    </section>
-
-    <section class="section text-center" style="overflow:hidden; position:relative;">
-        <h3 class="text-danger fw-bold mb-3">Blood Animation</h3>
-
-        <div id="anim-area" style="width:100%; height:220px; position:relative;">
-            <div id="box" style="
-        width:80px; height:80px;
-        background:#a83232; border-radius:80px;
-        position:absolute;">
-            </div>
-        </div>
-
-        <button id="animateBox" class="btn btn-outline-danger mt-3">Run Box Animation</button>
-    </section>
-
-
+  <section class="section">
+    <h3 class="text-center mb-2 fw-semibold text-danger">TV Evidence: Dexter Episodes</h3>
+    <p class="text-center text-secondary">Live data via TVMaze.</p>
+    <div class="input-group mb-3" style="max-width:540px;margin:0 auto;">
+      <input id="dexterQuery" type="text" class="form-control" placeholder="dexter new blood" value="dexter">
+      <button id="dexterFetch" class="btn btn-danger">Fetch</button>
+    </div>
+    <div id="episodesWrap" class="d-grid gap-2"></div>
+  </section>
 </main>
 
 <footer class="bg-dark text-white text-center py-3 mt-auto">
-    <p>&copy; 2025 DEXTER. Aibyn Farkhad Assem.</p>
+  <p>&copy; 2025 DEXTER. Aibyn Farkhad Assem.</p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
-    $("#analyzeBtn").click(() => {
-        const name = $("#nameInput").val().trim() || "Unknown";
-        const victims = Number($("#victimsInput").val());
-        let level;
-        if (isNaN(victims) || victims < 0) level = "Invalid input.";
-        else if (victims <= 2) level = "Low risk";
-        else if (victims <= 5) level = "Medium risk";
-        else if (victims <= 10) level = "High risk";
-        else level = "Extreme threat";
-        $("#resultText").text(`${name} classified as: ${level}`);
-    });
+$("#analyzeBtn").click(() => {
+  const name = $("#nameInput").val().trim() || "Unknown";
+  const victims = Number($("#victimsInput").val());
+  let level;
+  if (isNaN(victims) || victims < 0) level = "Invalid input.";
+  else if (victims <= 2) level = "Low risk";
+  else if (victims <= 5) level = "Medium risk";
+  else if (victims <= 10) level = "High risk";
+  else level = "Extreme threat";
+  $("#resultText").text(`${name} classified as: ${level}`);
+});
 
-    function sortNums(order) {
-        const input = $("#nums").val().trim();
-        if (!input) return alert("Enter numbers!");
-        const arr = input.split(",").map(x => parseFloat(x)).filter(x => !isNaN(x));
-        if (!arr.length) return alert("Invalid data!");
-        arr.sort((a,b)=> order==='asc'?a-b:b-a);
-        $("#sorted").text("Sorted: " + arr.join(", "));
+function sortNums(order) {
+  const raw = $("#nums").val().trim();
+  if (!raw) { $("#sorted").text("No data."); return; }
+  const arr = raw.split(",").map(x => Number(x.trim())).filter(x => !isNaN(x));
+  const sorted = arr.sort((a, b) => order === 'asc' ? a - b : b - a);
+  $("#sorted").text("Sorted: " + sorted.join(", "));
+}
+
+function centerBox() {
+  const $box = $("#animBox");
+  const parent = $box.parent();
+  const top = (parent.height() - $box.height()) / 2;
+  const left = (parent.width() - $box.width()) / 2;
+  $box.css({ top, left });
+}
+$(window).on("load resize", centerBox);
+
+$("#animateBox").click(() => {
+  const $box = $("#animBox");
+  const pos = $box.position();
+  const startTop = pos.top;
+  const startLeft = pos.left;
+  const stepRight = 120;
+  const stepDown = 70;
+
+  $box.stop(true, true)
+      .animate({ left: startLeft + stepRight }, 600)
+      .animate({ top: startTop + stepDown }, 600)
+      .animate({ width: 50, height: 50, opacity: 0.5 }, 600)
+      .animate({ left: startLeft, top: startTop, width: 80, height: 80, opacity: 1 }, 800);
+});
+</script>
+
+
+<script>
+(function(){
+  const q=document.getElementById('dexterQuery');
+  const btn=document.getElementById('dexterFetch');
+  const wrap=document.getElementById('episodesWrap');
+  if(!q||!btn||!wrap) return;
+
+  async function fetchShows(){
+    const query=(q.value||'dexter').trim();
+    wrap.innerHTML='<div class="text-secondary text-center">Loading blood samples…</div>';
+    try{
+      const res=await fetch('https://api.tvmaze.com/search/shows?q='+encodeURIComponent(query));
+      const data=await res.json();
+
+      const dexterOnly = data.filter(x=>{
+        const name=(x.show.name||"").toLowerCase();
+        return (
+          name.includes("dexter") &&
+          !name.includes("laboratory") &&
+          !name.includes("procter") &&
+          !name.includes("duster")
+        );
+      });
+
+      render(dexterOnly);
+    }catch(e){
+      wrap.innerHTML='<div class="text-danger text-center">Failed to fetch TV evidence.</div>';
     }
-    $("#asc").click(()=>sortNums('asc'));
-    $("#desc").click(()=>sortNums('desc'));
-    function centerBox() {
-        const $area = $("#anim-area");
-        const $box = $("#box");
+  }
 
-        const areaW = $area.innerWidth();
-        const areaH = $area.innerHeight();
-        const boxW = $box.outerWidth();
-        const boxH = $box.outerHeight();
-
-        const startLeft = Math.round((areaW - boxW) / 2);
-        const startTop = Math.round((areaH - boxH) / 2) - 20;
-
-        $box.css({ left: startLeft, top: startTop });
-    }
-    $(window).on("load resize", centerBox);
-
-    $("#animateBox").click(function () {
-        const $box = $("#box");
-        const startLeft = parseFloat($box.css("left"));
-        const startTop = parseFloat($box.css("top"));
-
-        const stepRight = 120;
-        const stepDown = 70;
-
-        $box.stop(true, true)
-            .animate({ left: startLeft + stepRight }, 600)
-            .animate({ top: startTop + stepDown }, 600)
-            .animate({ width: 50, height: 50, opacity: 0.5 }, 600)
-            .animate({ left: startLeft, top: startTop, width: 80, height: 80, opacity: 1 }, 800);
+  function render(items){
+    wrap.innerHTML='';
+    if(!items.length){wrap.innerHTML='<div class="text-warning text-center">No Dexter-related evidence found.</div>';return;}
+    items.forEach(x=>{
+      const s=x.show,img=(s.image&&s.image.medium)?s.image.medium:'https://via.placeholder.com/210x295?text=Dexter';
+      const year=(s.premiered||'').slice(0,4)||'—';
+      const div=document.createElement('div');
+      div.className='episode-card fade-in-up';
+      div.innerHTML=`
+        <div class="d-flex gap-3 flex-wrap align-items-start">
+          <img src="${img}" alt="${s.name}" style="width:120px;height:160px;object-fit:cover;border-radius:.5rem;">
+          <div>
+            <h6>${s.name} <small class="text-secondary">(${year})</small></h6>
+            <div class="mb-2"><span class="badge text-bg-danger">TV Evidence</span></div>
+            <a class="btn btn-outline-light btn-sm" href="${s.url}" target="_blank" rel="noopener">Open Case File</a>
+          </div>
+        </div>`;
+      wrap.appendChild(div);
     });
+  }
 
+  btn.addEventListener('click', fetchShows);
+  q.addEventListener('keyup', e=>{ if(e.key==='Enter') fetchShows(); });
+  fetchShows();
+})();
 </script>
 </body>
 </html>

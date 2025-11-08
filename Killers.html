@@ -1,185 +1,273 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
-    <meta charset="UTF-8" />
-    <title>DEXTER - Killers</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <script defer src="theme.js"></script>
-    <style>
-        .killer-info {
-            background-color: #f9f9f9;
-            transition: background 0.3s;
-        }
-        [data-bs-theme="dark"] .killer-info {
-            background-color: #1c1c1c;
-        }
-        .killer-info h5:hover {
-            text-decoration: underline;
-        }
-        .killer-detail {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.4s;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>DEXTER - Killers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script defer src="theme.js"></script>
+  <style>
+    .killer-info { background-color:#f9f9f9; transition:background 0.3s; position:relative; }
+    [data-bs-theme="dark"] .killer-info { background-color:#1c1c1c; }
+    .avatar { width:100%; height:220px; object-fit:cover; border-radius:12px; }
+    .killer-detail { display:none; opacity:0; transition:opacity 0.4s; }
+    .open-mini-btn { position:absolute; top:10px; right:10px; }
+
+    #killerGrid {
+      display:flex; flex-wrap:wrap; gap:20px; justify-content:center;
+    }
+    .killer-card {
+      width:260px; border:1px solid #333; border-radius:.75rem; overflow:hidden;
+      background:#1b1b1b; color:#eee; transition:transform .2s;
+    }
+    .killer-card:hover { transform:translateY(-4px); }
+    .killer-card img {
+      width:100%; height:240px; object-fit:cover;
+    }
+  </style>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
 <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">DEXTER</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div id="nav" class="collapse navbar-collapse">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                <li class="nav-item"><a class="nav-link active" href="Killers.html">Killers</a></li>
-                <li class="nav-item"><a class="nav-link" href="Case_Files.html">Case Files</a></li>
-                <li class="nav-item"><a class="nav-link" href="Analysis.html">Analysis</a></li>
-                <li class="nav-item"><a class="nav-link" href="Form.html">Access Terminal</a></li>
-            </ul>
-            <button id="themeToggle" class="btn btn-outline-secondary btn-sm ms-3">Toggle Theme</button>
-        </div>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="index.html">DEXTER</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div id="nav" class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link active" href="Killers.html">Killers</a></li>
+        <li class="nav-item"><a class="nav-link" href="Case_Files.html">Case Files</a></li>
+        <li class="nav-item"><a class="nav-link" href="Analysis.html">Analysis</a></li>
+        <li class="nav-item"><a class="nav-link" href="Form.html">Access Terminal</a></li>
+      </ul>
+      <button id="themeToggle" class="btn btn-outline-secondary btn-sm ms-3">Toggle Theme</button>
     </div>
+  </div>
 </nav>
 
 <main class="flex-fill">
-    <div class="container text-center my-4">
-        <h1 class="fw-bold">Infamous Killers</h1>
-        <p class="text-muted">Profiles of the most notorious figures</p>
+  <div class="container text-center my-4">
+    <h1 class="fw-bold">Infamous Killers</h1>
+    <div class="text-center my-4">
+      <button id="toggleProfiles" class="btn btn-danger me-2">Hide Profiles</button>
+      <button id="fadeProfiles" class="btn btn-dark">Fade Profiles</button>
     </div>
 
-    <div class="container">
-
-        <div class="text-center my-4">
-            <button id="toggleProfiles" class="btn btn-danger me-2">Hide Profiles</button>
-            <button id="fadeProfiles" class="btn btn-dark">Fade Profiles</button>
+    <div class="row g-4 killer-cards">
+      <div class="col-sm-6 col-md-3">
+        <div class="card h-100 text-center shadow-sm">
+          <img src="https://images.steamusercontent.com/ugc/38941270896180288/30175D423D8E0811A3A470CCDB8789783238B6CE/" alt="Dexter Morgan" class="avatar p-3" loading="lazy" />
+          <div class="card-body">
+            <h5 class="card-title">Dexter Morgan</h5>
+            <p class="card-text">The Bay Harbor Butcher — a code-bound vigilante.</p>
+            <button class="btn btn-primary reveal-info" data-target="#dexterDetail">View Psychological File</button>
+          </div>
         </div>
-
-        <div class="row g-4 killer-cards">
-            <!-- Dexter -->
-            <div class="col-sm-6 col-md-3">
-                <div class="card h-100 text-center shadow-sm">
-                    <img src="https://images.steamusercontent.com/ugc/38941270896180288/30175D423D8E0811A3A470CCDB8789783238B6CE/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false"
-                         alt="Dexter Morgan" class="avatar p-3" loading="lazy" />
-                    <div class="card-body">
-                        <h5 class="card-title">Dexter Morgan</h5>
-                        <p class="card-text">The Bay Harbor Butcher — a code-bound vigilante.</p>
-                        <button class="btn btn-primary reveal-info" data-target="#dexterDetail">View Psychological File</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Brian -->
-            <div class="col-sm-6 col-md-3">
-                <div class="card h-100 text-center shadow-sm">
-                    <img src="https://wallpaperaccess.com/full/16486779.jpg"
-                         alt="Brian Moser" class="avatar p-3" loading="lazy" />
-                    <div class="card-body">
-                        <h5 class="card-title">Brian Moser</h5>
-                        <p class="card-text">The Ice Truck Killer — chilling staged scenes.</p>
-                        <button class="btn btn-primary reveal-info" data-target="#brianDetail">View Psychological File</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Arthur -->
-            <div class="col-sm-6 col-md-3">
-                <div class="card h-100 text-center shadow-sm">
-                    <img src="https://static0.srcdn.com/wordpress/wp-content/uploads/2021/07/John-Lithgow-Dexter-Arthur-Mitchell-big-villain-problem.jpg"
-                         alt="Arthur Mitchell" class="avatar p-3" loading="lazy" />
-                    <div class="card-body">
-                        <h5 class="card-title">Arthur Mitchell</h5>
-                        <p class="card-text">The Trinity Killer — ritualized cycles.</p>
-                        <button class="btn btn-primary reveal-info" data-target="#arthurDetail">View Psychological File</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Miguel -->
-            <div class="col-sm-6 col-md-3">
-                <div class="card h-100 text-center shadow-sm">
-                    <img src="https://i.pinimg.com/1200x/2c/4f/27/2c4f27fcffa1bcf0bd0a9efd7a950c57.jpg"
-                         alt="Miguel Prado" class="avatar p-3" loading="lazy" />
-                    <div class="card-body">
-                        <h5 class="card-title">Miguel Prado</h5>
-                        <p class="card-text">ADA turned vigilante — consumed by power.</p>
-                        <button class="btn btn-primary reveal-info" data-target="#miguelDetail">View Psychological File</button>
-                    </div>
-                </div>
-            </div>
+      </div>
+      <div class="col-sm-6 col-md-3">
+        <div class="card h-100 text-center shadow-sm">
+          <img src="https://wallpaperaccess.com/full/16486779.jpg" alt="Brian Moser" class="avatar p-3" loading="lazy" />
+          <div class="card-body">
+            <h5 class="card-title">Brian Moser</h5>
+            <p class="card-text">The Ice Truck Killer — chilling staged scenes.</p>
+            <button class="btn btn-primary reveal-info" data-target="#brianDetail">View Psychological File</button>
+          </div>
         </div>
+      </div>
+      <div class="col-sm-6 col-md-3">
+        <div class="card h-100 text-center shadow-sm">
+          <img src="https://static0.srcdn.com/wordpress/wp-content/uploads/2021/07/John-Lithgow-Dexter-Arthur-Mitchell-big-villain-problem.jpg" alt="Arthur Mitchell" class="avatar p-3" loading="lazy" />
+          <div class="card-body">
+            <h5 class="card-title">Arthur Mitchell</h5>
+            <p class="card-text">The Trinity Killer — ritualized cycles.</p>
+            <button class="btn btn-primary reveal-info" data-target="#arthurDetail">View Psychological File</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-3">
+        <div class="card h-100 text-center shadow-sm">
+          <img src="https://i.pinimg.com/1200x/2c/4f/27/2c4f27fcffa1bcf0bd0a9efd7a950c57.jpg" alt="Miguel Prado" class="avatar p-3" loading="lazy" />
+          <div class="card-body">
+            <h5 class="card-title">Miguel Prado</h5>
+            <p class="card-text">Ambitious attorney entangled with Dexter’s code.</p>
+            <button class="btn btn-primary reveal-info" data-target="#miguelDetail">View Psychological File</button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="container mt-5">
-        <h3 class="text-danger fw-bold text-center mb-3">Psychological Files</h3>
-
-        <div id="dexterDetail" class="killer-info border rounded p-3 mb-3 killer-detail">
-            <h5 class="text-danger">Dexter Morgan</h5>
-            <p>Works as a blood analyst for Miami Metro. Follows a strict code to kill only guilty people.</p>
-        </div>
-
-        <div id="brianDetail" class="killer-info border rounded p-3 mb-3 killer-detail">
-            <h5 class="text-danger">Brian Moser</h5>
-            <p>Dexter’s estranged brother. Known as the Ice Truck Killer, leaves artistic murder scenes.</p>
-        </div>
-
-        <div id="arthurDetail" class="killer-info border rounded p-3 mb-3 killer-detail">
-            <h5 class="text-danger">Arthur Mitchell</h5>
-            <p>The Trinity Killer. Kills in ritualized sequences representing a twisted family structure.</p>
-        </div>
-
-        <div id="miguelDetail" class="killer-info border rounded p-3 mb-3 killer-detail">
-            <h5 class="text-danger">Miguel Prado</h5>
-            <p>Powerful attorney drawn into Dexter’s world. His ambition ultimately led to his downfall.</p>
-        </div>
+    <div class="text-center my-4">
+      <button id="toggleFiles" class="btn btn-outline-danger me-2">Toggle Psychological Files</button>
+      <button id="fadeFiles" class="btn btn-outline-secondary">Fade Files</button>
     </div>
+  </div>
+
+  <div class="container mt-5">
+    <h3 class="text-danger fw-bold text-center mb-3">Psychological Files</h3>
+
+    <div id="dexterDetail" class="killer-info border rounded p-3 mb-3 killer-detail">
+      <button class="btn btn-outline-danger btn-sm open-mini-btn open-file-btn" data-name="Dexter Morgan">Open File</button>
+      <h5 class="text-danger">Dexter Morgan</h5>
+      <p>Works as a blood analyst for Miami Metro. Follows a strict code to kill only guilty people.</p>
+    </div>
+
+    <div id="brianDetail" class="killer-info border rounded p-3 mb-3 killer-detail">
+      <button class="btn btn-outline-danger btn-sm open-mini-btn open-file-btn" data-name="Brian Moser">Open File</button>
+      <h5 class="text-danger">Brian Moser</h5>
+      <p>Dexter’s estranged brother. Known as the Ice Truck Killer, leaves artistic murder scenes.</p>
+    </div>
+
+    <div id="arthurDetail" class="killer-info border rounded p-3 mb-3 killer-detail">
+      <button class="btn btn-outline-danger btn-sm open-mini-btn open-file-btn" data-name="Arthur Mitchell">Open File</button>
+      <h5 class="text-danger">Arthur Mitchell</h5>
+      <p>The Trinity Killer. Kills in ritualized sequences representing a twisted family structure.</p>
+    </div>
+
+    <div id="miguelDetail" class="killer-info border rounded p-3 mb-3 killer-detail">
+      <button class="btn btn-outline-danger btn-sm open-mini-btn open-file-btn" data-name="Miguel Prado">Open File</button>
+      <h5 class="text-danger">Miguel Prado</h5>
+      <p>Powerful attorney drawn into Dexter’s world. His ambition ultimately led to his downfall.</p>
+    </div>
+  </div>
+
+  <div class="container mt-5">
+    <h3 class="text-danger text-center mb-3">Criminal Database Access</h3>
+    <div class="mb-3">
+      <label for="killerSearch" class="form-label">Search suspect by name</label>
+      <input id="killerSearch" type="text" class="form-control" placeholder="Trinity, Ice Truck, Bay Harbor..." />
+    </div>
+    <div id="killerGrid" class="hidden-on-load"></div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="caseModal" tabindex="-1" aria-labelledby="caseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content bg-dark text-light">
+        <div class="modal-header border-danger">
+          <h5 class="modal-title" id="caseModalLabel">Open Case</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="d-flex gap-3 flex-wrap">
+            <img id="caseImg" src="" alt="suspect" class="rounded" style="width:260px;height:200px;object-fit:cover;">
+            <div>
+              <h5 id="caseName" class="mb-1"></h5>
+              <span class="badge text-bg-danger" id="caseThreat"></span>
+              <p class="mt-2 mb-2" id="caseBio"></p>
+              <a id="caseWiki" href="#" target="_blank" rel="noopener" class="btn btn-outline-light btn-sm">Open File (Wiki)</a>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-danger">
+          <small class="text-secondary">Pinned cases are saved locally.</small>
+          <button type="button" class="btn btn-danger" id="pinCase">📌 Pin case</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 
 <footer class="bg-dark text-white text-center py-3 mt-auto">
-    <p>&copy; 2025 DEXTER. Aibyn Farkhad Assem.</p>
+  <p>&copy; 2025 DEXTER. Aibyn Farkhad Assem.</p>
 </footer>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
-    $(function(){
+$(function(){
+  let hidden=false;
+  $("#toggleProfiles").click(function(){
+    hidden=!hidden;
+    if(hidden){ $(".killer-cards").slideUp(400); $(this).text("Show Profiles").removeClass("btn-danger").addClass("btn-secondary"); }
+    else { $(".killer-cards").slideDown(400); $(this).text("Hide Profiles").removeClass("btn-secondary").addClass("btn-danger"); }
+  });
+  $("#fadeProfiles").click(()=>$(".killer-cards").fadeToggle(500));
+  $("#toggleFiles, #fadeFiles").on("click",function(){
+    const section=$("#dexterDetail, #brianDetail, #arthurDetail, #miguelDetail");
+    if($(this).is("#toggleFiles")){
+      section.is(":visible")?section.fadeOut(300):section.fadeIn(300).css("opacity",0).animate({opacity:1},300);
+    }else{
+      section.is(":visible")?section.animate({opacity:0},200,function(){section.slideUp(400);}):
+      section.slideDown(400,function(){section.css("opacity",0).animate({opacity:1},400);});
+    }
+  });
 
-        let hidden = false;
-        $("#toggleProfiles").click(function(){
-            if (!hidden) {
-                $(".killer-cards").fadeOut(700);
-                $(this).text("Show Profiles");
-                hidden = true;
-            } else {
-                $(".killer-cards").fadeIn(700);
-                $(this).text("Hide Profiles");
-                hidden = false;
-            }
-        });
-
-        $("#fadeProfiles").click(function(){
-            $(".killer-cards").fadeToggle(800);
-        });
-
-        $(".reveal-info").click(function(){
-            const target = $(this).data("target");
-            const section = $(target);
-
-            if (section.is(":visible")) {
-                section.animate({ opacity: 0 }, 200, function(){
-                    section.slideUp(400);
-                });
-            } else {
-                section.slideDown(400, function(){
-                    section.css("opacity", 0).animate({ opacity: 1 }, 400);
-                });
-            }
-        });
-    });
+  $(".reveal-info").on("click", function(){
+    const target = $(this).data("target");
+    const $section = $(target);
+    if ($section.is(":visible")) {
+      $section.fadeOut(400).css("opacity", 0);
+    } else {
+      $section.fadeIn(400).css("opacity", 0).animate({opacity:1}, 400);
+      $("html, body").animate({scrollTop: $section.offset().top - 100}, 500);
+    }
+  });
+});
 </script>
 
+<script>
+(async function(){
+  const suspects=[
+    {name:"Dexter Morgan",threat:"High",bio:"Forensic blood analyst for Miami Metro who follows the Code of Harry.",wiki:"https://dexter.fandom.com/wiki/Dexter_Morgan"},
+    {name:"Brian Moser",threat:"High",bio:"The Ice Truck Killer – Dexter’s estranged brother with a chilling artistry.",wiki:"https://dexter.fandom.com/wiki/Brian_Moser"},
+    {name:"Arthur Mitchell",threat:"Extreme",bio:"The Trinity Killer – methodical family annihilator following ritual patterns.",wiki:"https://dexter.fandom.com/wiki/Arthur_Mitchell"},
+    {name:"Miguel Prado",threat:"Medium",bio:"Assistant District Attorney drawn into Dexter’s moral spiral.",wiki:"https://dexter.fandom.com/wiki/Miguel_Prado"}
+  ];
+
+  const fallback={
+    "Dexter Morgan":"https://images.steamusercontent.com/ugc/38941270896180288/30175D423D8E0811A3A470CCDB8789783238B6CE/",
+    "Brian Moser":"https://wallpaperaccess.com/full/16486779.jpg",
+    "Arthur Mitchell":"https://static0.srcdn.com/wordpress/wp-content/uploads/2021/07/John-Lithgow-Dexter-Arthur-Mitchell-big-villain-problem.jpg",
+    "Miguel Prado":"https://i.pinimg.com/1200x/2c/4f/27/2c4f27fcffa1bcf0bd0a9efd7a950c57.jpg"
+  };
+
+  const grid=document.getElementById("killerGrid");
+  const search=document.getElementById("killerSearch");
+  const modal=new bootstrap.Modal(document.getElementById("caseModal"));
+  const $=s=>document.querySelector(s);
+  const LS={get:(k,d=null)=>JSON.parse(localStorage.getItem(k)||"null")??d,set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))};
+
+  function openCase(s){
+    $("#caseImg").src=fallback[s.name];
+    $("#caseName").textContent=s.name;
+    $("#caseThreat").textContent=s.threat;
+    $("#caseBio").textContent=s.bio;
+    $("#caseWiki").href=s.wiki;
+    modal.show();
+    LS.set("lastCase",s);
+  }
+
+  document.querySelectorAll(".open-file-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const s=suspects.find(x=>x.name===btn.dataset.name);
+      if(s) openCase(s);
+    });
+  });
+
+  function badge(l){return l==="Extreme"?"text-bg-danger":l==="High"?"text-bg-warning":"text-bg-secondary";}
+
+  function render(list){
+    grid.innerHTML="";
+    for(const s of list){
+      const card=document.createElement("div");
+      card.className="killer-card";
+      card.innerHTML=`
+        <img src="${fallback[s.name]}" alt="${s.name}">
+        <div class="p-2 d-flex justify-content-between align-items-start">
+          <div><h5 class="mb-1">${s.name}</h5><span class="badge ${badge(s.threat)}">${s.threat}</span></div>
+          <button class="btn btn-outline-danger btn-sm btn-open">Open</button>
+        </div>`;
+      card.querySelector(".btn-open").onclick=()=>openCase(s);
+      grid.append(card);
+    }
+  }
+
+  search.onkeyup=()=>{const q=search.value.toLowerCase();render(suspects.filter(s=>s.name.toLowerCase().includes(q)));};
+  render(suspects);
+})();
+</script>
 </body>
 </html>

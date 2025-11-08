@@ -14,55 +14,10 @@
         .form-box {
             max-width: 400px;
             margin: 100px auto;
-            background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 0 25px rgba(255,0,0,0.2);
-        }
-        .form-control, .form-select {
-            background-color: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-        }
-        .form-control:focus {
-            background-color: rgba(255,255,255,0.15);
-            border-color: #a83232;
-            box-shadow: 0 0 5px #a83232;
-        }
-        .btn-access {
-            background-color: #a83232;
-            border: none;
-        }
-        .btn-access:hover {
-            background-color: #8e2727;
-        }
-        #timeNow {
-            color: #ff4c4c;
-            font-weight: bold;
-        }
-        .alert-box {
-            display: none;
-            margin-top: 20px;
-            background: rgba(255,0,0,0.1);
-            border: 1px solid rgba(255,0,0,0.3);
-            border-radius: 10px;
-            padding: 10px;
-        }
-        .form-select {
-            background-color: #1a1a1a !important;
-            color: #fff !important;
-            border: 1px solid #a83232 !important;
+            padding: 25px;
+            border-radius: 12px;
         }
 
-        .form-select option {
-            background-color: #1a1a1a !important;
-            color: #fff !important;
-        }
-        [data-bs-theme="light"] body {
-            background: linear-gradient(to bottom, #ffffff, #e9e9e9);
-            color: #111;
-        }
         [data-bs-theme="light"] .form-box {
             background: rgba(255,255,255,0.9);
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
@@ -87,6 +42,30 @@
             color: white;
         }
 
+        .form-control:focus {
+            border-color: #a83232;
+            box-shadow: 0 0 5px #a83232;
+        }
+        .btn-access {
+            background-color: #a83232;
+            color: white;
+            border: none;
+        }
+        .btn-access:hover {
+            background-color: #8e2727;
+        }
+        #timeNow {
+            color: #ff4c4c;
+            font-weight: bold;
+        }
+        .alert-box {
+            display: none;
+            margin-top: 20px;
+            background: rgba(255,0,0,0.1);
+            border: 1px solid rgba(255,0,0,0.3);
+            border-radius: 10px;
+            padding: 10px;
+        }
     </style>
 </head>
 
@@ -112,31 +91,37 @@
 
 <main class="flex-fill">
     <div class="form-box">
-        <h2 class="text-center text-danger mb-4 fw-bold">Access Terminal</h2>
-        <form id="accessForm">
+        <h2 class="text-center">Access Terminal</h2>
+        <p class="text-center text-secondary">Current Time: <span id="timeNow"></span></p>
+        <form id="accessForm" novalidate>
             <div class="mb-3">
-                <label for="username" class="form-label">Operator ID</label>
-                <input type="text" id="username" class="form-control" placeholder="Enter your ID" required>
+                <label for="username" class="form-label">Agent Username</label>
+                <input id="username" type="text" class="form-control" placeholder="Enter your ID" required />
+                <div class="invalid-feedback">Username must be ≥3 chars, start with a letter.</div>
             </div>
+
             <div class="mb-3">
                 <label for="password" class="form-label">Security Key</label>
-                <input type="password" id="password" class="form-control" placeholder="Enter key" required>
+                <input id="password" type="password" class="form-control" placeholder="Enter Key" required />
+                <div class="invalid-feedback">Security key must be at least 8 characters.</div>
             </div>
+
             <div class="mb-3">
                 <label for="accessLevel" class="form-label">Access Level</label>
                 <select id="accessLevel" class="form-select" required>
-                    <option value="">Select level</option>
-                    <option value="1">Level 1 - Visitor</option>
-                    <option value="2">Level 2 - Analyst</option>
-                    <option value="3">Level 3 - Chief Investigator</option>
+                    <option value="">Select level...</option>
+                    <option value="Level 1">Level 1 — Lab</option>
+                    <option value="Level 2">Level 2 — Evidence</option>
+                    <option value="Level 3">Level 3 — Case Files</option>
                 </select>
+                <div class="invalid-feedback">Select access level.</div>
             </div>
-            <button type="submit" class="btn btn-access w-100">Grant Access</button>
+
+            <button type="submit" class="btn btn-access w-100">Unlock</button>
+            <div id="formMsg" class="mt-2 small"></div>
         </form>
 
-        <div id="alertBox" class="alert-box text-center text-danger fw-semibold"></div>
-
-        <p class="text-center mt-4">Session Time: <span id="timeNow"></span></p>
+        <div id="alertBox" class="alert-box">Access Denied: Invalid Security Key.</div>
     </div>
 </main>
 
@@ -158,7 +143,7 @@
             return;
         }
 
-        if (pass === "bloodcode") {
+        if (pass === "TryME123") {
             $("#alertBox").css("color", "#32cd32").text(`Access Granted: Welcome, ${user}.`).fadeIn(400);
         } else {
             $("#alertBox").css("color", "#ff4c4c").text("Access Denied: Invalid Security Key.").fadeIn(400);
@@ -168,6 +153,45 @@
     setInterval(() => {
         $("#timeNow").text(new Date().toLocaleString());
     }, 1000);
+</script>
+
+
+<script>
+(function(){
+  const form=document.getElementById('accessForm');
+  if(!form) return;
+  const user=document.getElementById('username');
+  const pass=document.getElementById('password');
+  const level=document.getElementById('accessLevel');
+  const msg=document.getElementById('formMsg');
+  const reUser=/^[A-Za-z][A-Za-z0-9_\-]{2,}$/; 
+
+  function setState(el, ok, text){
+    if(!el) return;
+    el.classList.remove('is-valid','is-invalid');
+    el.classList.add(ok?'is-valid':'is-invalid');
+    if(text && msg){ msg.textContent=text; msg.className = ok ? 'text-success small' : 'text-danger small'; }
+  }
+
+  form.addEventListener('submit', (e)=>{
+    let ok=true;
+    const uok = reUser.test((user?.value||'').trim());
+    setState(user, uok, uok?'':'Username must be ≥3 chars, start with a letter.');
+    ok = ok && uok;
+
+    const lok = !!(level && level.value);
+    setState(level, lok, lok?'':'Select access level.');
+    ok = ok && lok;
+
+    const pok = (pass?.value||'').trim().length>=8;
+    if(!pok) setState(pass, false, 'Security key must be at least 8 characters.');
+    ok = ok && ((pass?.value||'')==='TryME123');
+
+    if(!ok) { e.preventDefault(); return; }
+    msg.textContent='Access granted. Welcome, Agent.'; msg.className='text-success small';
+    localStorage.setItem('dexterAgent', JSON.stringify({ user: user?.value||null, level: level?.value||null }));
+  });
+})();
 </script>
 </body>
 </html>
