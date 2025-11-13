@@ -1,0 +1,5 @@
+body { transition: background 0.5s, color 0.5s; }
+#darkCarousel { max-width: 1000px; margin: 0 auto; }
+#darkCarousel .carousel-item { height: 600px; }
+#darkCarousel .carousel-item img { width: 100%; height: 100%; object-fit: cover; }
+.timestamp { font-weight: 600; color: #a83232; }

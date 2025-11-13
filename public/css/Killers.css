@@ -1,0 +1,20 @@
+
+
+
+.killer-info { background-color:#f9f9f9; transition:background 0.3s; position:relative; }
+[data-bs-theme="dark"] .killer-info { background-color:#1c1c1c; }
+.avatar { width:100%; height:220px; object-fit:cover; border-radius:12px; }
+.killer-detail { display:none; opacity:0; transition:opacity 0.4s; }
+.open-mini-btn { position:absolute; top:10px; right:10px; }
+
+#killerGrid {
+    display:flex; flex-wrap:wrap; gap:20px; justify-content:center;
+}
+.killer-card {
+    width:260px; border:1px solid #333; border-radius:.75rem; overflow:hidden;
+    background:#1b1b1b; color:#eee; transition:transform .2s;
+}
+.killer-card:hover { transform:translateY(-4px); }
+.killer-card img {
+    width:100%; height:240px; object-fit:cover;
+}

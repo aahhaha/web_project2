@@ -5,69 +5,9 @@
     <title>DEXTER - Access Terminal</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <script defer src="theme.js"></script>
-    <style>
-        body {
-            background: linear-gradient(to bottom, #1a1a1a, #000);
-            color: white;
-        }
-        .form-box {
-            max-width: 400px;
-            margin: 100px auto;
-            padding: 25px;
-            border-radius: 12px;
-        }
+    <link rel="stylesheet" href="public/css/Form.css">
 
-        [data-bs-theme="light"] .form-box {
-            background: rgba(255,255,255,0.9);
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        }
-        [data-bs-theme="light"] .form-control,
-        [data-bs-theme="light"] .form-select {
-            background-color: rgba(0,0,0,0.05);
-            color: #111;
-        }
-
-        [data-bs-theme="dark"] body {
-            background: linear-gradient(to bottom, #1a1a1a, #000);
-            color: #f8f8f8;
-        }
-        [data-bs-theme="dark"] .form-box {
-            background: rgba(255,255,255,0.05);
-            box-shadow: 0 0 25px rgba(255,0,0,0.2);
-        }
-        [data-bs-theme="dark"] .form-control,
-        [data-bs-theme="dark"] .form-select {
-            background-color: rgba(255,255,255,0.1);
-            color: white;
-        }
-
-        .form-control:focus {
-            border-color: #a83232;
-            box-shadow: 0 0 5px #a83232;
-        }
-        .btn-access {
-            background-color: #a83232;
-            color: white;
-            border: none;
-        }
-        .btn-access:hover {
-            background-color: #8e2727;
-        }
-        #timeNow {
-            color: #ff4c4c;
-            font-weight: bold;
-        }
-        .alert-box {
-            display: none;
-            margin-top: 20px;
-            background: rgba(255,0,0,0.1);
-            border: 1px solid rgba(255,0,0,0.3);
-            border-radius: 10px;
-            padding: 10px;
-        }
-    </style>
-</head>
+    <script defer src="public/js/theme.js"></script></head>
 
 <body class="d-flex flex-column min-vh-100">
 <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
@@ -131,67 +71,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $("#accessForm").on("submit", function(e) {
-        e.preventDefault();
-        const user = $("#username").val().trim();
-        const pass = $("#password").val().trim();
-        const level = $("#accessLevel").val();
+<script src="public/js/form.js"></script>
 
-        if (!user || !pass || !level) {
-            $("#alertBox").text("Access Denied: Missing credentials.").fadeIn(400);
-            return;
-        }
-
-        if (pass === "TryME123") {
-            $("#alertBox").css("color", "#32cd32").text(`Access Granted: Welcome, ${user}.`).fadeIn(400);
-        } else {
-            $("#alertBox").css("color", "#ff4c4c").text("Access Denied: Invalid Security Key.").fadeIn(400);
-        }
-    });
-
-    setInterval(() => {
-        $("#timeNow").text(new Date().toLocaleString());
-    }, 1000);
-</script>
-
-
-<script>
-(function(){
-  const form=document.getElementById('accessForm');
-  if(!form) return;
-  const user=document.getElementById('username');
-  const pass=document.getElementById('password');
-  const level=document.getElementById('accessLevel');
-  const msg=document.getElementById('formMsg');
-  const reUser=/^[A-Za-z][A-Za-z0-9_\-]{2,}$/; 
-
-  function setState(el, ok, text){
-    if(!el) return;
-    el.classList.remove('is-valid','is-invalid');
-    el.classList.add(ok?'is-valid':'is-invalid');
-    if(text && msg){ msg.textContent=text; msg.className = ok ? 'text-success small' : 'text-danger small'; }
-  }
-
-  form.addEventListener('submit', (e)=>{
-    let ok=true;
-    const uok = reUser.test((user?.value||'').trim());
-    setState(user, uok, uok?'':'Username must be ≥3 chars, start with a letter.');
-    ok = ok && uok;
-
-    const lok = !!(level && level.value);
-    setState(level, lok, lok?'':'Select access level.');
-    ok = ok && lok;
-
-    const pok = (pass?.value||'').trim().length>=8;
-    if(!pok) setState(pass, false, 'Security key must be at least 8 characters.');
-    ok = ok && ((pass?.value||'')==='TryME123');
-
-    if(!ok) { e.preventDefault(); return; }
-    msg.textContent='Access granted. Welcome, Agent.'; msg.className='text-success small';
-    localStorage.setItem('dexterAgent', JSON.stringify({ user: user?.value||null, level: level?.value||null }));
-  });
-})();
-</script>
 </body>
 </html>

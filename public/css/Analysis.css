@@ -1,0 +1,6 @@
+.section { max-width:600px; margin:50px auto; padding:25px; border-radius:12px; }
+[data-bs-theme="light"] .section { background:#f9f9f9; color:#212529; }
+[data-bs-theme="dark"]  .section { background:#1e1e1e; color:#f0f0f0; }
+.btn-analyze { background:#a83232; color:white; border:none; }
+.btn-analyze:hover { background:#912d2d; }
+.section h3 { color:#a83232; }

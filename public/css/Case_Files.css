@@ -1,0 +1,7 @@
+.thumb {
+    width: 64px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 8px;
+}
+#todoList li.done { text-decoration: line-through; color: gray; }
