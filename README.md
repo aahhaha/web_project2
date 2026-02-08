@@ -1,100 +1,284 @@
-# Assignment 6 — Advanced Web Application Development with JavaScript
+# Dexter Final Backend Project
 
-## Part A — Structure and Navigation (Aibyn)
+## Project Overview
 
-In this part I implemented the **main layout and navigation system** of the project.  
-The web app consists of six interconnected pages:
+This project is a full-stack web application with a Node.js (Express) backend and a simple static frontend.
+The application implements authentication, user profile management, and a second resource (Notes).
 
-- `index.html` — main page with a carousel and “Kill Mode” toggle  
-- `Killers.html` — gallery of serial killers  
-- `Case_Files.html` — case database with local storage  
-- `Analysis.html` — behavioral analysis lab  
-- `Form.html` — login and validation terminal  
-- Shared `profiles.css` and `theme.js` for design and theme control  
+Main features:
+- JWT authentication (register and login)
+- User profile management (get and update profile)
+- Notes CRUD functionality
+- Notes are linked to a specific case (killerKey) and to the user who created them
+- Authorization rules:
+    - only the owner can edit or delete their notes
+    - all authenticated users can view notes for a case
 
-Each page includes:
-- A consistent **navbar** and **footer** with Bootstrap 5 components.  
-- Responsive structure that automatically adjusts to different screen sizes.  
-- Cohesive visual theme in red, white, and black colors.  
-
-The **page structure** and **responsiveness** satisfy the *Application Structure and Layout* requirements.  
-Bootstrap’s grid, margins, and flex utilities ensure clean alignment, while custom CSS in `profiles.css` handles hover animations, spacing, and transitions.
-
----
-
-## Part B — JavaScript Functionality (Farkhad)
-
-This section demonstrates **arrays, loops, conditionals, DOM manipulation, and event handling** across multiple pages.
-
-### Core Functionality
-
-- Arrays store killer data and evidence entries (`Killers.html` and `Case_Files.html`).
-- Loops render cards and dynamic lists directly into the DOM.
-- Conditional statements classify suspects and analyze user inputs in `Analysis.html`.
-
-### DOM Manipulation
-
-Used both **vanilla JS** and **jQuery** to:
-- Add and remove evidence tasks.
-- Sort DNA samples by ascending or descending order.
-- Animate the blood box using chained `.animate()` calls.
-- Display live data fetched from the **TVMaze API**, filtered to show only “Dexter” results.
-
-### Event Handling
-
-At least three types of listeners are implemented:
-- `click` — buttons, analysis triggers, theme toggles.  
-- `keyup` — live query submission for the API.  
-- `resize` — automatic centering of the animation box.  
-
-All listeners dynamically update the DOM, modify CSS, and respond to user input in real time.
-
-### Functions
-
-Reusable JavaScript functions include:
-- `setTheme()` and `getTheme()` for persistent dark/light mode.
-- `sortNums(order)` for numeric sorting.
-- `centerBox()` for responsive animation.
-- `fetchShows()` and `render()` for API data integration.
-
-Functions prevent code repetition and make scripts modular and maintainable.
+Technologies used:
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT (JSON Web Token)
+- bcrypt
 
 ---
 
-## Part C — Local Storage, Form Validation & Persistence (Assem)
+## Setup and Installation Instructions
 
-In this part I implemented **persistent data** and **form control**.
+### Requirements
+- Node.js installed
+- MongoDB installed and running locally (or MongoDB Atlas)
 
-### Local Storage
-Several pages save user state locally:
-- `theme.js` remembers the chosen display theme.
-- `Case_Files.html` stores to-do tasks and last opened evidence.
-- `Killers.html` saves the last opened killer’s profile.
-These features restore automatically after reload.
+### Installation
 
-### Form Validation
-In `Form.html`, input validation ensures correct user access:
-- Email format validation.
-- Password check (valid password: `TryME123`).
-- Real-time error messages and confirmation feedback.
+1. Clone the repository
+2. Open the backend folder
+3. Install dependencies:
 
-This improves interactivity and aligns with the “Form Validation” and “Event Handling” grading criteria.
+npm install
 
-### Advanced Features
-- **Animation:** smooth fade-in and movement sequences in `Analysis.html` (Blood Box).  
-- **API Integration:** live show data from *TVMaze API* displayed dynamically.  
-- **Custom Theme:** dark/light theme switch via `data-bs-theme` attribute and saved preference.
+### Environment Variables
+
+Create a `.env` file in the backend folder with the following content:
+
+PORT=5000  
+MONGODB_URI=mongodb://127.0.0.1:27017/final_project  
+JWT_SECRET=your_secret_key
+
+### Run MongoDB
+If you are using a local MongoDB instance, make sure MongoDB is running.
+
+### Start the Server
+
+node src/server.js
+
+The server will run on:
+http://localhost:5000
+
+### Frontend Pages
+
+The frontend is served by Express from the `public` folder.
+
+Available pages:
+- Form.html – login and registration
+- Case_Files.html – case notes management
+- Profile.html – user profile page
 
 ---
 
-## Conclusion
+## API Documentation
 
-The **DEXTER Behavioral Analysis System** demonstrates:
-- Clear multi-page architecture  
-- Strong JavaScript interactivity  
-- Use of advanced browser features  
-- Consistent, creative design  
+### Access Types
+- Public – no authentication required
+- Private – requires Authorization header with JWT token
 
-All required elements (loops, arrays, events, DOM manipulation, API, local storage, validation, and animation) are implemented and functional.  
+Authorization header format:
+Authorization: Bearer <token>
 
-Each member contributed to distinct parts but worked together to ensure coherence and user experience across the entire web app.
+---
+
+## Authentication Routes (Public)
+
+### Register User
+POST /api/auth/register
+
+Request body:
+{
+"username": "Aibyn",
+"email": "user@mail.com",
+"password": "password123"
+}
+
+Response:
+{
+"message": "Registered",
+"token": "...",
+"user": {
+"id": "...",
+"username": "...",
+"email": "..."
+}
+}
+
+---
+
+### Login User
+POST /api/auth/login
+
+Request body:
+{
+"email": "user@mail.com",
+"password": "password123"
+}
+
+Response:
+{
+"message": "Logged in",
+"token": "...",
+"user": {
+"id": "...",
+"username": "...",
+"email": "..."
+}
+}
+
+---
+
+## User Routes (Private)
+
+### Get User Profile
+GET /api/users/profile
+
+Response:
+{
+"id": "...",
+"username": "...",
+"email": "..."
+}
+
+---
+
+### Update User Profile
+PUT /api/users/profile
+
+Request body:
+{
+"username": "NewName",
+"email": "new@mail.com",
+"password": "newpassword123"
+}
+
+Notes:
+- password is optional
+- email must be unique
+
+Response:
+{
+"message": "Profile updated",
+"user": {
+"id": "...",
+"username": "...",
+"email": "..."
+}
+}
+
+---
+
+## Notes Routes (Second Resource, Private)
+
+### Create Note
+POST /api/notes
+
+Request body:
+{
+"killerKey": "dexter_morgan",
+"text": "First note about Dexter"
+}
+
+Response:
+{
+"message": "Note created",
+"note": {
+"id": "...",
+"killerKey": "...",
+"text": "...",
+"createdAt": "..."
+}
+}
+
+---
+
+### Get Notes by Case
+GET /api/notes?killerKey=dexter_morgan
+
+Response:
+{
+"killerKey": "dexter_morgan",
+"notes": [
+{
+"id": "...",
+"text": "...",
+"createdAt": "...",
+"owner": {
+"id": "...",
+"username": "...",
+"email": "..."
+}
+}
+]
+}
+
+---
+
+### Get Note by ID
+GET /api/notes/:id
+
+Response:
+{
+"id": "...",
+"killerKey": "...",
+"text": "...",
+"createdAt": "...",
+"owner": {
+"id": "...",
+"username": "...",
+"email": "..."
+}
+}
+
+---
+
+### Update Note
+PUT /api/notes/:id
+
+Request body:
+{
+"text": "Updated note text"
+}
+
+Response:
+{
+"message": "Note updated",
+"note": {
+"id": "...",
+"killerKey": "...",
+"text": "...",
+"createdAt": "..."
+}
+}
+
+---
+
+### Delete Note
+DELETE /api/notes/:id
+
+Response:
+{
+"message": "Note deleted"
+}
+
+---
+
+## Authorization Rules
+
+- JWT is required for all private routes
+- Notes are visible to all authenticated users
+- Only the note owner can edit or delete a note
+
+---
+
+## Project Structure
+
+src/
+- app.js
+- server.js
+- controllers/
+- routes/
+- models/
+- middleware/
+
+public/
+- HTML files
+- JavaScript files
+- CSS files
